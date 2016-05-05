@@ -56,9 +56,9 @@ app.put('/lions/:id', function _handleUpdateLions_(req, res) {
 });
 
 app.delete('/lions/:id', function _handleDeleteLions_(req, res) {
-  let lion = lions[req.params.id];
-  if (lion && lion.id.toString() === req.params.id) {
-    lions[req.params.id] = null;
+  let lionIndex = _.findIndex(lions, {id: req.params.id});
+  if (lions[lionIndex]) {
+    delete lions[lionIndex];
     res.status(200).json(req.body);
   } else {
     res.status(404).json('lion not found');
