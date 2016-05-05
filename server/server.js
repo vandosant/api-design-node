@@ -27,7 +27,7 @@ app.get('/lions', function _handleLions_(req, res) {
 });
 
 app.get('/lions/:id', function _handleLion_(req, res) {
-  let lion = _.find(lions, {id: parseInt(req.params.id)});
+  let lion = _.find(lions, {id: req.params.id});
   if (lion) {
     res.status(200).json(lion);
   } else {
@@ -36,17 +36,20 @@ app.get('/lions/:id', function _handleLion_(req, res) {
 });
 
 app.post('/lions', function _handleCreateLions_(req, res) {
-  lions.push(Object.assign(req.body, {id: id}));
+  lions.push(Object.assign(req.body, {id: id.toString()}));
   id++;
   res.status(201).json(req.body);
 });
 
 app.put('/lions/:id', function _handleUpdateLions_(req, res) {
-  let lion = lions[req.params.id]
-  if (lion && lion.id.toString() === req.params.id) {
-    lion = Object.assign(lion, req.body);
-    lions[req.params.id] = lion
-    res.status(200).json(lion);
+  let update = req.body;
+  if (update.id) {
+    delete update.id
+  }
+  let lionIndex = _.findIndex(lions, {id: req.params.id})
+  if (lions[lionIndex]) {
+    let updatedLion = Object.assign(lions[lionIndex], update);
+    res.status(200).json(updatedLion);
   } else {
     res.status(404).send('lion not found');
   }
