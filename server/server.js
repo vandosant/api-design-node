@@ -32,8 +32,12 @@ app.use(bodyParser.json());
 
 app.param('id', function(req, res, next, id) {
   const lion = _.find(lions, {id: id})
-  req.lion = lion
-  next()
+  if (lion) {
+    req.lion = lion
+    next()
+  } else {
+    res.status(404).send('Lion not found')
+  }
 });
 
 app.get('/lions', function(req, res){
@@ -65,6 +69,12 @@ app.put('/lions/:id', function(req, res) {
   } else {
     var updatedLion = _.assign(lions[lion], update);
     res.json(updatedLion);
+  }
+});
+
+app.use(function(err, req, res) {
+  if (err) {
+    res.status(500).send('error', {error: err})
   }
 });
 
