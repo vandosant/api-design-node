@@ -16,22 +16,22 @@ tigerRouter.param('id', function(req, res, next, paramId) {
   }
 });
 
-tigerRouter.get('/', function(req, res) {
+tigerRouter.route('/')
+.get(function(req, res) {
   res.json(tigers)
-});
-
-tigerRouter.get('/:id', function(req, res) {
-  res.json(req.tiger)
-});
-
-tigerRouter.post('/', function(req, res) {
+})
+.post(function(req, res) {
   let tiger = Object.assign(req.body, {id: id.toString()})
   tigers.push(tiger)
   id++
   res.json(tiger)
 });
 
-tigerRouter.put('/:id', function(req, res) {
+tigerRouter.route('/:id')
+.get(function(req, res) {
+  res.json(req.tiger)
+})
+.put(function(req, res) {
   let updatedTiger = req.body
   if (updatedTiger.id) {
     delete updatedTiger.id
