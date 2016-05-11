@@ -1,5 +1,5 @@
 var lionRouter = require('express').Router();
-
+var _ = require('lodash')
 var lions = [];
 var id = 0;
 
@@ -12,13 +12,12 @@ var updateId = function(req, res, next) {
 };
 
 lionRouter.param('id', function(req, res, next, id) {
-  var todo = _.find(todos, {id: id});
-
-  if (todo) {
-    req.todo = todo;
+  var lion = _.find(lions, {id: id});
+  if (lion) {
+    req.lion = lion;
     next();
   } else {
-    res.send();
+    res.status(404).send('lion not found');
   }
 });
 
@@ -27,7 +26,7 @@ lionRouter.get('/', function(req, res){
 });
 
 lionRouter.get('/:id', function(req, res){
-  var lion = req.todo;
+  var lion = req.lion
   res.json(lion || {});
 });
 
